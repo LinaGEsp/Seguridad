@@ -4,6 +4,12 @@
 
 # Session Data files
 .RData
+.Rmd
+.rmd
+
+## Excel files
+.xlsx
+.xls
 
 # Example code in package build process
 *-Ex.R

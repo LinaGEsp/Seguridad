@@ -1,0 +1,20 @@
+name: "Banco BBVA"
+navbar:
+  title: "Banco BBVA"
+  href: Home.html
+  left:
+    - text: "Home"
+      href: Home.html
+output:
+  html_document:
+    theme: cerulean
+    #highlight: tango #haddock
+    include:
+      after_body: footer2.html
+#      in_header: logo.html
+    css: styles.css
+    runtime: shiny
+    toc: yes
+    toc_float:
+      collapsed: true
+      smooth_scroll: false
