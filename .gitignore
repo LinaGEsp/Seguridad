@@ -7,6 +7,14 @@
 .Rmd
 .rmd
 
+## maps
+./BBVA_map_files/
+./data/BBVA
+./data/BBVA/*.csv
+./data/BBVA/*.xlsx
+./data/BBVA/*.xls
+./results/*.csv
+
 ## Excel files
 .xlsx
 .xls
