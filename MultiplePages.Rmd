@@ -1,0 +1,111 @@
+---
+title: "Estudio seguridad red de Oficinas BBVA"
+author: "Head of Data - Seguridad"
+output: 
+  flexdashboard::flex_dashboard:
+    vertical_layout: scroll
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+#library(shinydashboard)
+```
+
+Menú {.sidebar}
+======================================================================
+
+
+
+Home 
+=================================
+
+### Abstract
+
+Se plantea la necesidad de realizar un estudio estadístico que permita determinar las necesidades de seguridad a atender para cada una de las sucursales del BBVA en Colombia. En este sentido, el objetivo es cuantificar el riesgo de hurto para cada sucursal, dependiendo de su ubicación geográfica.
+
+
+### Origen de la información
+
+Como punto de partida, el presente estudio determinó como fuente de información las [Estadísticas delictivas  de la Policía Nacional](https://www.policia.gov.co/grupo-informaci%C3%B3n-criminalidad/estadistica-delictiva). 
+
+### Vandalismos
+
+<iframe src="https://camiloaguilar.shinyapps.io/Vandalismos_v2/" style="border: none; width: 900px; height: 650px"></iframe>
+
+Mapas
+======================================
+
+### Localización de vandalismo y hurto 
+
+<iframe src="file:///C:/Users/lina.maria.gallo.es1/CloudDrive/myfiles/BBVA/BBVA_map.html" style="border: none; width: 900px; height: 650px"></iframe>
+
+
+Comparación con otra entidad financiera {data-orientation=rows data-navmenu="Análisis Preliminar"}
+=======================================
+
+<!-- data-navmenu="Análisis Preliminar" -->
+
+**COMPARACIÓN CON OTRA ENTIDAD FINANCIERA**
+
+Para determinar si la vandalización de cajeros de BBVA se comporta de manera similar a la presentada por otras entidades del sector, se compararon los datos generales con los de otra Entidad del sector. 
+
+Los valores presentados corresponden al promedio de las medidas mensuales de Enero a Julio de 2019 para BBVA y la Entidad X. 
+
+
+<!-- **PORCENTAJE DE CAJEROS VANDALIZADOS** -->
+
+Row
+--------------------------------
+
+### PORCENTAJE DE CAJEROS VANDALIZADOS
+
+```{r}
+gauge(20, min = 0, max = 100, symbol = '%', label="BBVA")
+```
+
+```{r}
+gauge(33.45, min = 0, max = 100, symbol = '%', label = "ENTIDAD X")
+```
+
+### Mayor vandalización - BBVA
+
+```{r}
+valueBox('Mes_Dummy', icon ="fa-exclamation-triangle")
+```
+
+### Mayor vandalización - Entidad X
+
+```{r}
+valueBox('Marzo', icon ="fa-exclamation-triangle")
+```
+
+
+Row
+--------------------------------
+
+### TIPO DE VANDALIZACIÓN
+
+```{r}
+table1 <- matrix(c(3.10, 0.68, 0.05, 0.52, 93.78, 1.88, 3.52, 0.95, 0.19, 1.03, 94.12, 0.18),ncol=6,byrow=TRUE)
+colnames(table1) <- c("Dispensador","Fascia", "Monitor", "Teclados", "Lectora", "Otros")
+rownames(table1) <- c("BBVA", "Entidad X")
+table1 <- as.table(table1)
+table1
+```
+
+
+Estadísticas Descriptivas {data-navmenu="Análisis Preliminar" data-orientation=rows}
+=======================================
+**VANDALISMO POR NIVEL DE PROVISIÓN**
+
+### Cajeros Nivel 7
+
+```{r}
+valueBox("94.58 %", icon="ion-card")
+```
+
+### Cajeros Nivel 4
+
+```{r}
+valueBox("5.42 %", icon="ion-card")
+```
