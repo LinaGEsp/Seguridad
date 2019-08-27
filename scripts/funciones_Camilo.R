@@ -374,7 +374,7 @@ search_API <- function(lat, lon, r=200, key_word='cajero', place_type='finance',
   ## &radius=200
   ## &type=atm
   ## &keyword=cajero
-  ## &key=AIzaSyDSun3Qk75C9794hbUQ7TtxUGUBjeX9_58
+  ## &key=
   
   url <- "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
   location = paste0("?location=", lat, ',', lon)

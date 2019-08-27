@@ -4,7 +4,7 @@ source('./scripts/fun.R')
 load.lib('dplyr', 'reshape2', 'readxl', 'ggmap', 'RCurl', 'rjson', 'stringr', 'progress')
 
 
-#https://maps.googleapis.com/maps/api/geocode/json?address=VDA%20ISAZA%20%2C%20BARBOSA%20%2C%20COLOMBIA&key=AIzaSyDSun3Qk75C9794hbUQ7TtxUGUBjeX9_58
+#https://maps.googleapis.com/maps/api/geocode/json?address=VDA%20ISAZA%20%2C%20BARBOSA%20%2C%20COLOMBIA&key=
 
 #*********************************
 ## 1. Información Hurtos####
@@ -24,7 +24,8 @@ head(HEF)
 
 location1 = paste(HEF$Barrio, HEF$Municipio, 'Colombia', sep=" , ")
 location2 = paste(HEF$Municipio, HEF$Departamento, 'Colombia', sep=" , ")
-key = 'AIzaSyDSun3Qk75C9794hbUQ7TtxUGUBjeX9_58'
+API_key = rjson::fromJSON(file='./key/api_key.json')
+key = API_key$google
 
 location1[1:6]
 geoClean(location1, type = "Zones")
@@ -107,7 +108,7 @@ Oficinas$lat[i] <- 2.5729269
 Oficinas$lon[i] <- -72.644144
 
 
-key = 'AIzaSyDSun3Qk75C9794hbUQ7TtxUGUBjeX9_58'
+key = API_key$google
 
 #p$results[[1]]$address_components[[8]]$long_name
 #p$results[[1]]$formatted_address
@@ -163,7 +164,7 @@ for(j in 1:length(cajeros$`DIRECCION DEL ATM`)){
 location1 = paste(new_dir, cajeros$CIUDAD, 'Colombia', sep=" , ")
 location1[i]
 geoClean(location1[i], type = 'directions')
-key = 'AIzaSyDSun3Qk75C9794hbUQ7TtxUGUBjeX9_58'
+key = API_key$google
 
 zipcode = c()
 lat = c()

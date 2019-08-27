@@ -1,9 +1,9 @@
 source('./scripts/funciones_Camilo.R')
 
-load.lib('dplyr', 'reshape2', 'stringr', 'progress', 'lubridate')
+load.lib('dplyr', 'reshape2', 'stringr', 'progress', 'lubridate', 'rjson')
 
 ## API Google elevation
-# https://maps.googleapis.com/maps/api/elevation/json?locations=4.994178,-74.0524603&key=AIzaSyDSun3Qk75C9794hbUQ7TtxUGUBjeX9_58
+# https://maps.googleapis.com/maps/api/elevation/json?locations=4.994178,-74.0524603&key=
 
 #*********************************
 ## 1. Google places API ####
@@ -21,8 +21,12 @@ cajeros$CIUDAD[prueba]
 cajeros$lat[prueba]
 cajeros$lon[prueba]
 
+
+
+API_key = rjson::fromJSON(file = './key/api_key.json')
+API_key$google_api
 p <- search_API(cajeros$lat[prueba], cajeros$lon[prueba],
-                API_key = 'AIzaSyDSun3Qk75C9794hbUQ7TtxUGUBjeX9_58')
+                API_key = API_key$google_api) 
 
 length(p$results)
 p$results[[1]]$name
@@ -42,7 +46,7 @@ fin <- 3 #length(cajeros$lat)
 
 for (i in 48:length(cajeros$lat)) {
   p <- search_API(cajeros$lat[i], cajeros$lon[i],
-                  API_key = 'AIzaSyDSun3Qk75C9794hbUQ7TtxUGUBjeX9_58')
+                  API_key = API_key$google_api)
   
   consulta_ATMs[[i]] <- list(ATM = cajeros$`NOMBRE DEL ATM`[i], 
                              City = cajeros$CIUDAD[i],
