@@ -9,7 +9,7 @@
 
 ## ignore folders
 BBVA_map_files/
-data/BBVA
+data/BBVA/
 results/*.csv
 
 ## Excel files
