@@ -8,7 +8,9 @@ output:
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
-#library(shinydashboard)
+library(purrr)
+library(ggplot2)
+info <- readRDS('c:/Users/lina.maria.gallo.es1/Documents/GitHub/Seguridad/data/BBVA/data_wrangling/vandalismo/201907-geo_vandalismo.RDS')
 ```
 
 Menú {.sidebar}
@@ -19,23 +21,23 @@ Menú {.sidebar}
 Home 
 =================================
 
-### Abstract
+### ABSTRACT
 
 Se plantea la necesidad de realizar un estudio estadístico que permita determinar las necesidades de seguridad a atender para cada una de las sucursales del BBVA en Colombia. En este sentido, el objetivo es cuantificar el riesgo de hurto para cada sucursal, dependiendo de su ubicación geográfica.
 
 
-### Origen de la información
+### ORIGEN DE LA INFORMACIÓN
 
 Como punto de partida, el presente estudio determinó como fuente de información las [Estadísticas delictivas  de la Policía Nacional](https://www.policia.gov.co/grupo-informaci%C3%B3n-criminalidad/estadistica-delictiva). 
 
-### Vandalismos
+### VANDALISMOS
 
 <iframe src="https://camiloaguilar.shinyapps.io/Vandalismos_v2/" style="border: none; width: 900px; height: 650px"></iframe>
 
 Mapas
 ======================================
 
-### Localización de vandalismo y hurto 
+### LOCALIZACIÓN DE VANDALISMO Y HURTOS
 
 <iframe src="file:///C:/Users/lina.maria.gallo.es1/CloudDrive/myfiles/BBVA/BBVA_map.html" style="border: none; width: 900px; height: 650px"></iframe>
 
@@ -57,55 +59,91 @@ Los valores presentados corresponden al promedio de las medidas mensuales de Ene
 Row
 --------------------------------
 
-### PORCENTAJE DE CAJEROS VANDALIZADOS
+### CAJEROS VANDALIZADOS BBVA
 
 ```{r}
-gauge(20, min = 0, max = 100, symbol = '%', label="BBVA")
+gauge(20, min = 0, max = 100, symbol = '%')
 ```
+
+### CAJEROS VANDALIZADOS ENTIDAD X
 
 ```{r}
-gauge(33.45, min = 0, max = 100, symbol = '%', label = "ENTIDAD X")
+gauge(33.45, min = 0, max = 100, symbol = '%')
 ```
 
-### Mayor vandalización - BBVA
+### **BBVA** - 11.23% de los cajeros vandalizados fueron atacados en este mes
 
 ```{r}
-valueBox('Mes_Dummy', icon ="fa-exclamation-triangle")
+valueBox('Mayo')
 ```
 
-### Mayor vandalización - Entidad X
+<!-- > 11.23% de los cajeros vandalizados fueron atacados en este mes. -->
+
+### **Entidad X** - 15.11% de los cajeros vandalizados fueron atacados en este mes
 
 ```{r}
-valueBox('Marzo', icon ="fa-exclamation-triangle")
+valueBox('Marzo', color="grey")
 ```
 
+<!-- > 15.11% de los cajeros vandalizados fueron atacados en este mes. -->
 
 Row
 --------------------------------
 
-### TIPO DE VANDALIZACIÓN
+### PARTES VANDALIZADAS
 
 ```{r}
 table1 <- matrix(c(3.10, 0.68, 0.05, 0.52, 93.78, 1.88, 3.52, 0.95, 0.19, 1.03, 94.12, 0.18),ncol=6,byrow=TRUE)
 colnames(table1) <- c("Dispensador","Fascia", "Monitor", "Teclados", "Lectora", "Otros")
 rownames(table1) <- c("BBVA", "Entidad X")
-table1 <- as.table(table1)
-table1
+
+barplot(table1, main = "Partes vandalizadas", ylab = "Porcentaje (sobre vandalizados)", beside = TRUE, ylim = c(0,100))
 ```
 
 
-Estadísticas Descriptivas {data-navmenu="Análisis Preliminar" data-orientation=rows}
-=======================================
-**VANDALISMO POR NIVEL DE PROVISIÓN**
 
-### Cajeros Nivel 7
+Análisis estadístico {data-orientation=rows data-navmenu="Análisis Preliminar"}
+============================================
+
+**ANÁLISIS ESTADÍSTICO**
+
+A continuación se presentan estadísticas obtenidas de la exploración inicial de los datos.
+
+Row
+------------------------------------------------
+ 
+### De los cajeros vandalizados tienen **nivel 7 de aprovisionamiento**
 
 ```{r}
-valueBox("94.58 %", icon="ion-card")
+valueBox("94.58 %", icon="ion-card", color = "green")
 ```
 
-### Cajeros Nivel 4
+### De los cajeros vandalizados tienen **nivel 4 de aprovisionamiento**
 
 ```{r}
-valueBox("5.42 %", icon="ion-card")
+valueBox("5.42 %", icon="ion-card", color = "orange")
+```
+
+Row
+--------------------------------
+
+### DISTRIBUCIÓN EVENTOS DE VANDALISMO
+
+<!-- Estos porcentajes son sobre los cajeros vandalizados, no sobre el total. Hay que cambiarlo cuando tengamos la información -->
+
+```{r}
+fechas <- unique(info[["Mes"]])
+per <- 0
+
+for (i in 1:length(fechas)){
+  query <- subset(info, (`Mes`== fechas[i]))
+  per[i] <- (nrow(query)/nrow(info))*100
+}
+
+Per_Fecha <- do.call(rbind, Map(data.frame, Mes=fechas, Porcentaje=per))
+Per_Fecha <- Per_Fecha[order(Per_Fecha$Mes),]
+
+Per_Fecha$Mes <- as.Date(Per_Fecha$Mes)
+
+ggplot(Per_Fecha, aes(Mes, Porcentaje)) + geom_line() +  scale_x_date() + xlab("") + ylab("Porcentaje de cajeros vandalizados") + ylim(5,13)
 ```
