@@ -50,3 +50,7 @@ rsconnect/
 
 # API keys
 key/*.json
+
+# RDS files
+*.RDS
+*.csv
