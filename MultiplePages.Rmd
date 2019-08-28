@@ -10,7 +10,7 @@ output:
 library(flexdashboard)
 library(purrr)
 library(ggplot2)
-info <- readRDS('c:/Users/lina.maria.gallo.es1/Documents/GitHub/Seguridad/data/BBVA/data_wrangling/vandalismo/201907-geo_vandalismo.RDS')
+info <- readRDS('./data/BBVA/data_wrangling/vandalismo/201907-geo_vandalismo.RDS')
 ```
 
 Menú {.sidebar}
