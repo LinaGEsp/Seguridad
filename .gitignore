@@ -7,13 +7,10 @@
 .Rmd
 .rmd
 
-## maps
-./BBVA_map_files/
-./data/BBVA
-./data/BBVA/*.csv
-./data/BBVA/*.xlsx
-./data/BBVA/*.xls
-./results/*.csv
+## ignore folders
+BBVA_map_files/
+data/BBVA/
+results/*.csv
 
 ## Excel files
 .xlsx
@@ -21,6 +18,7 @@
 
 # Example code in package build process
 *-Ex.R
+#asdasfasfas
 
 # Output files from R CMD build
 /*.tar.gz
@@ -48,3 +46,11 @@ vignettes/*.pdf
 
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
+.Rproj.user
+
+# API keys
+key/*.json
+
+# RDS files
+*.RDS
+*.csv

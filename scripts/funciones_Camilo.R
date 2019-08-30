@@ -374,7 +374,7 @@ search_API <- function(lat, lon, r=200, key_word='cajero', place_type='finance',
   ## &radius=200
   ## &type=atm
   ## &keyword=cajero
-  ## &key=AIzaSyDSun3Qk75C9794hbUQ7TtxUGUBjeX9_58
+  ## &key=
   
   url <- "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
   location = paste0("?location=", lat, ',', lon)
@@ -419,4 +419,25 @@ alerta_API <- function(petitions = 25000){
   
   return(sel)
 }
+
+diff_months <- function(date1, date2){
+  require(lubridate)
+  fechas <- floor_date(c(date1, date2), 'month')
+  dif <- diff.Date(fechas)
+  #print(dif)
+  result <- ifelse(dif == 0, 'mismo_mes', 
+                   ifelse(dif < 32, 'cambio_1mes', 
+                          'cambio_sup_1mes'))
+  return(result)
+}
+
+monnb <- function(d) { 
+  lt <- as.POSIXlt(as.Date(d, origin="1900-01-01"))
+  lt$year*12 + lt$mon 
+} 
+
+# compute a month difference as a difference between two monnb's
+mondf <- function(d1, d2) { 
+  abs(monnb(d2) - monnb(d1) )
+  }
 
