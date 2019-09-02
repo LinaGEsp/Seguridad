@@ -10,7 +10,8 @@ output:
 library(flexdashboard)
 library(purrr)
 library(ggplot2)
-info <- readRDS('c:/Users/lina.maria.gallo.es1/Documents/GitHub/Seguridad/data/BBVA/data_wrangling/vandalismo/201907-geo_vandalismo.RDS')
+library(shiny)
+info <- readRDS('./data/BBVA/data_wrangling/vandalismo/201907-geo_vandalismo.RDS')
 ```
 
 Menú {.sidebar}
@@ -147,3 +148,19 @@ Per_Fecha$Mes <- as.Date(Per_Fecha$Mes)
 
 ggplot(Per_Fecha, aes(Mes, Porcentaje)) + geom_line() +  scale_x_date() + xlab("") + ylab("Porcentaje de cajeros vandalizados") + ylim(5,13)
 ```
+
+Row
+----------------------------------
+
+### ENTIDADES CON CAJEROS CERCANOS
+
+![](./CajerosCercanos.jpg)
+
+Exploración de datos {data-navmenu="Análisis Preliminar"}
+============================================
+
+**EXPLORACIÓN DE DATOS**
+
+Para ver la distribución de vandalismo dependiendo de cada variable estudiada, escoja la variable que quiere visualizar. 
+
+<!-- SHINY INTERACTIVE PLOT -->
