@@ -110,3 +110,171 @@ ggplot(data=Sumas, aes(x=reorder(Banco, -Sum), y=Sum, fill = Banco)) +
 dev.off()
 
 
+#.................................SHINY GADGET EXAMPLE.....................................
+
+
+library(shiny)
+library(miniUI)
+library(ggplot2)
+
+ggbrush <- function(data, xvar, yvar) {
+  
+  ui <- miniPage(
+    gadgetTitleBar("Drag to select points"),
+    miniContentPanel(
+      # The brush="brush" argument means we can listen for
+      # brush events on the plot using input$brush.
+      plotOutput("plot", height = "100%", brush = "brush")
+    )
+  )
+  
+  server <- function(input, output, session) {
+    
+    # Render the plot
+    output$plot <- renderPlot({
+      # Plot the data with x/y vars indicated by the caller.
+      ggplot(data, aes_string(xvar, yvar)) + geom_point()
+    })
+    
+    # Handle the Done button being pressed.
+    observeEvent(input$done, {
+      # Return the brushed points. See ?shiny::brushedPoints.
+      stopApp(brushedPoints(data, input$brush))
+    })
+  }
+  
+  runGadget(ui, server, viewer = browserViewer())
+}
+
+
+#....................MULTI-TAB SHINY GADGET EXAMPLE..............................................
+
+
+library(shiny)
+library(miniUI)
+library(leaflet)
+library(ggplot2)
+
+ui <- miniPage(
+  miniTitleBar("Shiny gadget example"),
+  miniTabstripPanel(
+    miniTabPanel("Parameters", icon = icon("sliders"),
+                 miniContentPanel(
+                   sliderInput("year", "Year", 1978, 2010, c(2000, 2010), sep = "")
+                 )
+    ),
+    miniTabPanel("Visualize", icon = icon("area-chart"),
+                 miniContentPanel(
+                   plotOutput("cars", height = "100%")
+                 )
+    ),
+    miniTabPanel("Map", icon = icon("map-o"),
+                 miniContentPanel(padding = 0,
+                                  leafletOutput("map", height = "100%")
+                 ),
+                 miniButtonBlock(
+                   actionButton("resetMap", "Reset")
+                 )
+    ),
+    miniTabPanel("Data", icon = icon("table"),
+                 miniContentPanel(
+                   DT::dataTableOutput("table")
+                 )
+    )
+  )
+)
+
+server <- function(input, output, session) {
+  output$cars <- renderPlot({
+    require(ggplot2)
+    ggplot(cars, aes(speed, dist)) + geom_point()
+  })
+  
+  output$map <- renderLeaflet({
+    force(input$resetMap)
+    
+    leaflet(quakes, height = "100%") %>% addTiles() %>%
+      addMarkers(lng = ~long, lat = ~lat)
+  })
+  
+  output$table <- DT::renderDataTable({
+    diamonds
+  })
+  
+  observeEvent(input$done, {
+    stopApp(TRUE)
+  })
+}
+
+runGadget(shinyApp(ui, server), viewer = browserViewer())
+
+
+#...............................GADGET PARA EL APP DE SEGURIDAD....................
+
+library(shiny)
+library(miniUI)
+library(leaflet)
+library(ggplot2)
+
+ui <- miniPage(
+  miniTitleBar("Exploración de datos"),
+  miniTabstripPanel(
+    miniTabPanel("Zonas", icon = icon("location-arrow"),
+                 miniContentPanel(
+                   selectInput("Territorial", label = "Zonas:",
+                               choices = c("Centro", "Occidente", "Bogotá", "Norte"), selected = "Centro")
+                ),
+                 miniContentPanel(
+                   plotOutput("var", height = "100%")
+                 )
+    ),
+    miniTabPanel("Mapa", icon = icon("map-o"),
+                 miniContentPanel(padding = 0,
+                                  leafletOutput("map", height = "100%")
+                 ),
+                 miniButtonBlock(
+                   actionButton("resetMap", "Reset")
+                 )
+    ),
+    miniTabPanel("Data", icon = icon("table"),
+                 miniContentPanel(
+                   DT::dataTableOutput("datos")
+                 )
+    )
+  )
+)
+
+server <- function(input, output, session) {
+  output$var <- renderPlot({
+    require(ggplot2)
+    ggplot(data=Total, aes(x=reorder(Banco, -Conteo), y=Conteo, fill = Banco)) +
+      geom_bar(stat="identity", position=position_dodge())+
+      geom_text(aes(label= Banco), vjust=0.5, color="black",
+                position = position_stack(vjust = 0.5), size=3.5, angle = 90)+
+      labs(y = "Frecuencia") +
+      annotate("text", label = "Frecuencia - top 3 cajeros cercanos", x=6, y=950, size = 4.5, colour = "darkblue")+
+      scale_fill_brewer(palette="Paired")+
+      theme(axis.ticks.x=element_blank(),
+            axis.text.x=element_blank(),
+            axis.title.x=element_blank(),
+            axis.line = element_line( linetype = "dotted"))
+  })
+  
+  output$map <- renderLeaflet({
+    force(input$resetMap)
+    
+    leaflet(quakes, height = "100%") %>% addTiles() %>%
+      addMarkers(lng = ~long, lat = ~lat)
+  })
+  
+  output$datos <- DT::renderDataTable({
+    info
+  })
+  
+  observeEvent(input$done, {
+    stopApp(TRUE)
+  })
+}
+
+runGadget(shinyApp(ui, server), viewer = browserViewer())
+
