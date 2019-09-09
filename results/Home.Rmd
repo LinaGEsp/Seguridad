@@ -1,0 +1,34 @@
+---
+title: "Estudio seguridad red de Oficinas BBVA"
+author: "Head of Data - Seguridad"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Abstract
+Se plantea la necesidad de realizar un estudio estadístico que permita determinar las necesidades de seguridad a atender para cada una de las sucursales del BBVA en Colombia. En este sentido, el objetivo es cuantificar el riesgo de hurto para cada sucursal, dependiendo de su ubicación geográfica.
+
+
+## Origen de la información
+
+Como punto de partida, el presente estudio determinó como fuente de información las [Estadísticas delictivas  de la Policía Nacional](https://www.policia.gov.co/grupo-informaci%C3%B3n-criminalidad/estadistica-delictiva). 
+
+
+## Vandalismos
+<iframe src="https://camiloaguilar.shinyapps.io/Vandalismos_v2/" style="border: none; width: 900px; height: 650px"></iframe>
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
